@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Wish detail</h2>
+    <h3>{{ wish.title }}</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Description</th>
+            <td>{{ wish.description }}</td>
+        </tr>
+        <tr>
+            <th>Auteur</th>
+            <td>{{ wish.author }}</td>
+        </tr>
+        <tr>
+            <th>Créé le</th>
+            <td>{{ wish.dateCreated|date('d/m/Y H:i:s') }}</td>
+        </tr>
+        {% if wish.category is not empty %}
+            <tr>
+                <th>Catégorie</th>
+                <td>{{ wish.category.name }}</td>
+            </tr>
+        {% endif %}
+    </table>
+    <br><br>
+    {% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ url('wishes_update', {'id': wish.id}) }}">Modifier</a>
+    {% endif %}
+    <a href="{{ url('wishes_wishes') }}">Retour a la liste</a>
+{% endblock %}

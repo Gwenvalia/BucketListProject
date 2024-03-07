@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>About Us</h2>
+    <ol class="about">
+        {% for member in data %}
+            <img src="{{ asset(member.picture)}}" alt="" class="member">
+            <li class="about">{{ member.firstname }} {{ member.lastname }}{% if member.firstname == 'Fabien'  %} &#10084;{% endif %}</li>
+            <ul class="about">
+                <li class="about">Né le : {{ member.dateOfBirth|date('d-m-Y') }}</li>
+                <li class="about">Créateur de : {{ member.creatorOf }}</li>
+                <li class="about"> Description : {{ member.description }}</li>
+            </ul>
+        {% endfor %}
+    </ol>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>All Wishes</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Voeux</th>
+                <th>Catégorie</th>
+                <th>Détail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wish in wishes %}
+                <tr>
+                    <td>{{ wish.title }}</td>
+                    {% if wish.category is not empty %}
+                        <td>{{ wish.category.name }}</td>
+                    {% else %}
+                        <td>Sans catégorie</td>
+                    {% endif %}
+                    <td><a href="{{ url('wishes_detail', {'id': wish.id}) }}">Voir</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
