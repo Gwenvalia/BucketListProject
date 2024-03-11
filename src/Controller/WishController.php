@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Wish;
 use App\Form\WishType;
+use App\Helper\Censurator;
 use App\Repository\WishRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,8 +58,8 @@ class WishController extends AbstractController
     }
 
     #[Route(path: "create", name: 'create', methods: ["GET", "POST"])]
-    #[IsGranted('ROLE_CONTRIBUTOR')]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response {
+    #[IsGranted('ROLE_USER')]
+    public function create(Request $request, EntityManagerInterface $entityManager, Censurator $censurator): Response {
 
         $wish = new Wish();
         $form = $this->createForm(WishType::class, $wish);
@@ -68,6 +69,14 @@ class WishController extends AbstractController
 
             $wish->setDateCreated(new DateTime());
             $wish->setIsPublished(true);
+
+            //Vérification des mots a censurer
+            $purifiedTitle = $censurator->purify($wish->getTitle());
+            $wish->setTitle($purifiedTitle);
+            $purifiedDescription = $censurator->purify($wish->getDescription());
+            $wish->setDescription($purifiedDescription);
+            $purifiedAuthor = $censurator->purify($wish->getAuthor());
+            $wish->setAuthor($purifiedAuthor);
 
             $entityManager->persist($wish);
             $entityManager->flush();
